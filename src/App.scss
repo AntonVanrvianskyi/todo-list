@@ -1,0 +1,16 @@
+@use "./styles/variables.scss"  as *;
+@use "./styles/mixins.scss"  as *;
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $rootBackground;
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  @include flexMixin(flex, center, center, column)
+
+}

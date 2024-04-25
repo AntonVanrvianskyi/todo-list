@@ -1,0 +1,52 @@
+@use "../../styles/mixins.scss"  as *;
+@use "../../styles/variables.scss" as *;
+
+.container {
+    max-width: 900px;
+    width: 50%;
+    height: 670px;
+    background-color: $bgColorContainer;
+    border-radius: 32px;
+    padding: 24px;
+
+    h1 {
+        color: $blackTextColor;
+    }
+}
+.input-container {
+    position: relative;
+
+}
+
+.btn-disabled {
+    width: 84px;
+    position: absolute;
+    bottom: 7px;
+    right: 7px;
+    font-size: $rootFontSize;
+    opacity: 0.5;
+}
+
+.button {
+    width: 84px;
+    position: absolute;
+    bottom: 7px;
+    right: 7px;
+    font-size: $rootFontSize;
+}
+
+.input-create-todo {
+    width: 100%;
+    height: 58px;
+    border-radius: 8px;
+    border: none;
+    box-sizing: border-box;
+    padding-left: 20px;
+    font-size: $rootFontSize;
+    
+}
+@media (max-width: 550px)  {
+    .container {
+        width: 80%;
+    }
+}

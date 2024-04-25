@@ -1,0 +1,84 @@
+@use "../../../styles/mixins.scss" as *;
+@use "../../../styles/variables.scss" as *;
+
+@include animation-mixin(fadeIn);
+
+.all-todo {
+    width: 100%;
+    @include flexMixin(flex, flex-start, center, column);
+    gap: 10px;
+    animation: fadeIn 1s ease-out forwards;
+    height: 430px;
+    overflow: auto;
+}
+
+.todo-item {
+    width: 100%;
+    height: 60px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 10px;
+    @include flexMixin(flex, space-between, center, row);
+    background-color: $bgEmptyToDo;
+    .info-container {
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        p {
+            margin-left: 20px;
+        }
+    }
+}
+.completed-item {
+    width: 100%;
+    height: 60px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding: 10px;
+    @include flexMixin(flex, space-between, center, row);
+    background-color: $bgEmptyToDo;
+    opacity: 0.5;
+    .info-container {
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        p {
+            margin-left: 20px;
+        }
+    }
+}
+.checkbox {
+    width: 15px;
+    height: 15px;
+}
+
+.update-input {
+    margin-left: 20px;
+    background-color: $bgColorContainer;
+    height: 40px;
+    border-radius: 8px;
+    box-sizing: border-box;
+    padding-left: 10px;
+    border: none;
+}
+.update-input:focus-visible {
+    border: none;
+}
+
+
+.container-btn {
+    display: flex;
+    .edit-btn {
+        width: 100px;
+        margin-left: 10px;
+    }
+}
+
+@media (max-width: 780px)  {
+    .edit-btn {
+        width: 80px !important;
+        height: 40px;
+    }
+}
+
+

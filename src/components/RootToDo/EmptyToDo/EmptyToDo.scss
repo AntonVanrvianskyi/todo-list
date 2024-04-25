@@ -1,0 +1,12 @@
+@use "../../../styles/mixins.scss" as *;
+@use "../../../styles/variables.scss" as *;
+
+.empty-container{
+    @include flexMixin(flex, center, center, row);
+    border: 2px solid $borderColorEmpty;
+    height: 65%;
+    background-color: $bgEmptyToDo;
+    border-radius: 8px;
+    font-size: $rootFontSize;
+    color: $blackTextColor;
+}

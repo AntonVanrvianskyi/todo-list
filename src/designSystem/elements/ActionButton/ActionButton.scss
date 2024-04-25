@@ -1,0 +1,14 @@
+@use "../../../styles/variables.scss" as *;
+
+.action-button {
+    background-color: $bgActionButton;
+    height: 44px;
+    border-radius: 8px;
+    border: none;
+    color: $textColor;
+
+
+}
+.action-button:hover {
+    cursor: pointer;
+}
