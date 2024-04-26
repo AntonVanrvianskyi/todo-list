@@ -24,7 +24,8 @@ function DeletedToDo () {
                 deletedTodo.map((todo, index) => 
                     <TodoItem
                       key={index}
-                      isDeleted 
+                      isDeleted
+                      idTodo={todo.id} 
                       label={todo.value}
                       onDelete={() => onDelete(index)} 
                     />

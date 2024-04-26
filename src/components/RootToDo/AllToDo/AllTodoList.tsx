@@ -9,28 +9,30 @@ interface PropsItem {
     label: string
     onDelete: () => void;
     isDeleted?: boolean;
-    indexProps?: number
+    indexProps?: number;
+    idTodo: number;
 }
 
-export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: PropsItem) {
+export function TodoItem ({label, idTodo, indexProps, isDeleted = false, onDelete}: PropsItem) {
     const {allTodo} = useAppSelector(state => state.todoReducer)
     const isChecked = allTodo.find((_, index) => index === indexProps);
-    const idTodo = allTodo.find((todo) => todo.value === label)?.id
     const isOneUpdated = allTodo.some((todo) => todo.isUpdate === true)
     const [isUpdate, setIsUpdate] = useState<boolean>(false);
     const [value, setValue] = useState<string>(label)
     const dispatch = useAppDispatch();
-    
+
     useEffect(() => {
-        dispatch(todoActions.updateTodo({id: idTodo, currentState: value, isUpdate: isUpdate}))
+        dispatch(todoActions.updateTodo({id: idTodo, currentState: label, isUpdate: isUpdate}))
     } ,[])
 
     const onChecked = () => {
+        if(!isUpdate){
         if(isChecked?.isChecked){
             dispatch(todoActions.removeCheckedProps({id: isChecked.id}))
 
         } else {
             dispatch(todoActions.addCheckedProps({id: isChecked?.id}))
+        }
         }
         
     }
@@ -42,6 +44,7 @@ export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: Prop
     const todoItemClassName = isChecked?.isChecked ? "completed-item" : "todo-item"
     const className =  isOneUpdated ? "disabled-btn" : "edit-btn";
     const disabledDelete = isChecked?.isChecked || isOneUpdated;
+    const checked = isUpdate ? false : isChecked?.isChecked
 
     return (
         <>
@@ -49,7 +52,7 @@ export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: Prop
                 <div className="info-container">
                   {
                     !isDeleted && <input 
-                                    checked={isChecked?.isChecked}
+                                    checked={checked}
                                     onChange={onChecked} 
                                     className="checkbox" 
                                     type="checkbox"
@@ -100,6 +103,7 @@ function AllTodoList() {
                       key={index}
                       indexProps={index} 
                       label={todo.value}
+                      idTodo={todo.id}
                       onDelete={() => onDelete(Number(todo.id))} 
                     />
                 )
