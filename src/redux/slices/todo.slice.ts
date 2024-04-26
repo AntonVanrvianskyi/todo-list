@@ -1,15 +1,21 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-
+interface Todo {
+    id?: number;
+    value: string,
+    isChecked?: boolean
+}
 interface IState {
-    allTodo: string[]
-    deletedTodo: string[]
+    allTodo: Todo[]
+    deletedTodo: Todo[],
+    counter: number
 }
 
 
 const initialState: IState = {
     allTodo: [],
     deletedTodo: [],
+    counter: 1
 }
 
 
@@ -18,7 +24,7 @@ const slice = createSlice({
     initialState,
     reducers: {
         createNewToDo: (state, action) => {
-            state.allTodo.push(action.payload)
+            state.allTodo.push({id: state.counter ++, value: action.payload})
         },
         deleteTodo: (state, action) => {
             const {isDeleted, index} = action.payload 
@@ -30,10 +36,29 @@ const slice = createSlice({
             }
         },
         updateTodo: (state, action) => {
-            const {prevState, currentState} = action.payload
-            const indexFindedTodo = state.allTodo.indexOf(prevState)
-            state.allTodo.splice(indexFindedTodo, 1, currentState)
+            const {id, currentState} = action.payload
+            const findedElement = state.allTodo.find((todo) => todo.id === id )
+            if(findedElement) {
+                findedElement.value = currentState
+            }
+           
         },
+        addCheckedProps: (state, action) => {
+            const {id} = action.payload
+            const findedElement = state.allTodo.find((todo) => todo.id === id )
+            if(findedElement) {
+                findedElement.isChecked = true
+            }
+        },
+        removeCheckedProps: (state, action) => {
+            const {id} = action.payload
+            const findedElement = state.allTodo.find((todo) => todo.id === id )
+            if(findedElement) {
+                findedElement.isChecked = false
+            }
+        }
+
+
     },
     
 })

@@ -9,8 +9,8 @@ import { Outlet } from "react-router-dom";
 
 function RootToDo (){
 
-    const [value, setValue] = useState("")
-    const dispatch = useAppDispatch()
+    const [value, setValue] = useState("");
+    const dispatch = useAppDispatch();
 
     const createNewToDo = () => {
         dispatch(todoActions.createNewToDo(value))

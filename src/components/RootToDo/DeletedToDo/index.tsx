@@ -25,7 +25,7 @@ function DeletedToDo () {
                     <TodoItem
                       key={index}
                       isDeleted 
-                      label={todo}
+                      label={todo.value}
                       onDelete={() => onDelete(index)} 
                     />
                 )
