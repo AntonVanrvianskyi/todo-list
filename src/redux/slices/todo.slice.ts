@@ -30,12 +30,12 @@ const slice = createSlice({
         deleteTodo: (state, action) => {
             const {isDeleted, id} = action.payload 
             const index = state.allTodo.findIndex(todo => todo.id === id);
-
             if (!isDeleted){
                 const deletedTodo = state.allTodo.splice(index, 1)
                 state.deletedTodo.push(...deletedTodo)
             }  else {
-                state.deletedTodo.splice(index, 1)
+                const aa = state.deletedTodo.filter((todo) => todo.id !== id)
+                state.deletedTodo = [...aa]
             }
         },
         updateTodo: (state, action) => {

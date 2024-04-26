@@ -8,8 +8,8 @@ function DeletedToDo () {
     const {deletedTodo} = useAppSelector(state => state.todoReducer)
     const dispatch = useAppDispatch()
 
-    const onDelete = (index: number) => {
-        dispatch(todoActions.deleteTodo({index, isDeleted: true}))
+    const onDelete = (id: number) => {
+        dispatch(todoActions.deleteTodo({id, isDeleted: true}))
     }
 
     if (deletedTodo.length === 0) {
@@ -27,7 +27,7 @@ function DeletedToDo () {
                       isDeleted
                       idTodo={todo.id} 
                       label={todo.value}
-                      onDelete={() => onDelete(index)} 
+                      onDelete={() => onDelete(todo.id)} 
                     />
                 )
             }
