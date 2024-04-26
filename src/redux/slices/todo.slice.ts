@@ -4,6 +4,7 @@ interface Todo {
     id: number;
     value: string,
     isChecked?: boolean
+    isUpdate?: boolean
 }
 interface IState {
     allTodo: Todo[]
@@ -40,10 +41,11 @@ const slice = createSlice({
             }
         },
         updateTodo: (state, action) => {
-            const {id, currentState} = action.payload
+            const {id, currentState, isUpdate} = action.payload
             const findedElement = state.allTodo.find((todo) => todo.id === id )
             if(findedElement) {
                 findedElement.value = currentState
+                findedElement.isUpdate = isUpdate
             }
            
         },

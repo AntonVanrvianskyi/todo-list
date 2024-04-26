@@ -16,6 +16,7 @@ export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: Prop
     const {allTodo, isUpdateAll} = useAppSelector(state => state.todoReducer)
     const isChecked = allTodo.find((_, index) => index === indexProps);
     const idTodo = allTodo.find((todo) => todo.value === label)?.id
+    const isOneUpdated = allTodo.some((todo) => todo.isUpdate === true)
     const [isUpdate, setIsUpdate] = useState<boolean>(false);
     const [value, setValue] = useState<string>(label)
     const dispatch = useAppDispatch();
@@ -31,7 +32,6 @@ export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: Prop
     }
     const onUpdate = () => {
         setIsUpdate((prevState) => !prevState)
-        console.log(isUpdate, "8696678678876")
         if (isUpdate){
             dispatch(todoActions.changeUpdate(false))
 
@@ -39,11 +39,13 @@ export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: Prop
             dispatch(todoActions.changeUpdate(true))
         }
 
-        dispatch(todoActions.updateTodo({id: idTodo, currentState: value}))
+        dispatch(todoActions.updateTodo({id: idTodo, currentState: value, isUpdate: !isUpdate}))
     }
     const labelButton = isUpdate ? "Save" : "Update" 
     const todoItemClassName = isChecked?.isChecked ? "completed-item" : "todo-item"
-    const className = isUpdateAll ? "disabled-btn" : "edit-btn";
+    const className = isUpdateAll || isOneUpdated ? "disabled-btn" : "edit-btn";
+    const disabledDelete = isChecked?.isChecked || isUpdateAll || isOneUpdated;
+
     return (
         <>
           <div className={todoItemClassName}>
@@ -72,7 +74,7 @@ export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: Prop
                     {
                       !isDeleted && <ActionButton disabled={isChecked?.isChecked} label={labelButton} onClick={onUpdate} className="edit-btn"/>
                     }
-                  <ActionButton disabled={isChecked?.isChecked || isUpdateAll} label="Delete" onClick={onDelete} className={className}/>
+                  <ActionButton disabled={disabledDelete} label="Delete" onClick={onDelete} className={className}/>
                 </div>
           </div>
         </>
