@@ -10,7 +10,6 @@ interface IState {
     allTodo: Todo[]
     deletedTodo: Todo[],
     counter: number,
-    isUpdateAll: boolean,
 }
 
 
@@ -18,7 +17,6 @@ const initialState: IState = {
     allTodo: [],
     deletedTodo: [],
     counter: 1,
-    isUpdateAll: false,
 }
 
 
@@ -63,9 +61,6 @@ const slice = createSlice({
                 findedElement.isChecked = false
             }
         },
-        changeUpdate: (state, action) => {
-            state.isUpdateAll = action.payload
-        }
     },
     
 })

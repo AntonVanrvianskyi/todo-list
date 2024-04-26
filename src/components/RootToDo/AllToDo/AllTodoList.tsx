@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ActionButton from "../../../designSystem/elements/ActionButton";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux.hook";
 import { todoActions } from "../../../redux/slices";
@@ -13,14 +13,18 @@ interface PropsItem {
 }
 
 export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: PropsItem) {
-    const {allTodo, isUpdateAll} = useAppSelector(state => state.todoReducer)
+    const {allTodo} = useAppSelector(state => state.todoReducer)
     const isChecked = allTodo.find((_, index) => index === indexProps);
     const idTodo = allTodo.find((todo) => todo.value === label)?.id
     const isOneUpdated = allTodo.some((todo) => todo.isUpdate === true)
     const [isUpdate, setIsUpdate] = useState<boolean>(false);
     const [value, setValue] = useState<string>(label)
     const dispatch = useAppDispatch();
-  
+    
+    useEffect(() => {
+        dispatch(todoActions.updateTodo({id: idTodo, currentState: value, isUpdate: isUpdate}))
+    } ,[])
+
     const onChecked = () => {
         if(isChecked?.isChecked){
             dispatch(todoActions.removeCheckedProps({id: isChecked.id}))
@@ -32,19 +36,12 @@ export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: Prop
     }
     const onUpdate = () => {
         setIsUpdate((prevState) => !prevState)
-        if (isUpdate){
-            dispatch(todoActions.changeUpdate(false))
-
-        } else {
-            dispatch(todoActions.changeUpdate(true))
-        }
-
         dispatch(todoActions.updateTodo({id: idTodo, currentState: value, isUpdate: !isUpdate}))
     }
     const labelButton = isUpdate ? "Save" : "Update" 
     const todoItemClassName = isChecked?.isChecked ? "completed-item" : "todo-item"
-    const className = isUpdateAll || isOneUpdated ? "disabled-btn" : "edit-btn";
-    const disabledDelete = isChecked?.isChecked || isUpdateAll || isOneUpdated;
+    const className =  isOneUpdated ? "disabled-btn" : "edit-btn";
+    const disabledDelete = isChecked?.isChecked || isOneUpdated;
 
     return (
         <>
