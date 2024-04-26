@@ -1,21 +1,23 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 interface Todo {
-    id?: number;
+    id: number;
     value: string,
     isChecked?: boolean
 }
 interface IState {
     allTodo: Todo[]
     deletedTodo: Todo[],
-    counter: number
+    counter: number,
+    isUpdateAll: boolean,
 }
 
 
 const initialState: IState = {
     allTodo: [],
     deletedTodo: [],
-    counter: 1
+    counter: 1,
+    isUpdateAll: false,
 }
 
 
@@ -27,7 +29,9 @@ const slice = createSlice({
             state.allTodo.push({id: state.counter ++, value: action.payload})
         },
         deleteTodo: (state, action) => {
-            const {isDeleted, index} = action.payload 
+            const {isDeleted, id} = action.payload 
+            const index = state.allTodo.findIndex(todo => todo.id === id);
+
             if (!isDeleted){
                 const deletedTodo = state.allTodo.splice(index, 1)
                 state.deletedTodo.push(...deletedTodo)
@@ -56,9 +60,10 @@ const slice = createSlice({
             if(findedElement) {
                 findedElement.isChecked = false
             }
+        },
+        changeUpdate: (state, action) => {
+            state.isUpdateAll = action.payload
         }
-
-
     },
     
 })

@@ -13,42 +13,44 @@ interface PropsItem {
 }
 
 export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: PropsItem) {
-    const {allTodo} = useAppSelector(state => state.todoReducer)
-    const isChecked = allTodo.find((_, index) => index === indexProps)?.isChecked;
+    const {allTodo, isUpdateAll} = useAppSelector(state => state.todoReducer)
+    const isChecked = allTodo.find((_, index) => index === indexProps);
     const idTodo = allTodo.find((todo) => todo.value === label)?.id
     const [isUpdate, setIsUpdate] = useState<boolean>(false);
     const [value, setValue] = useState<string>(label)
     const dispatch = useAppDispatch();
   
     const onChecked = () => {
-        if(isChecked){
-            dispatch(todoActions.removeCheckedProps({id: idTodo}))
+        if(isChecked?.isChecked){
+            dispatch(todoActions.removeCheckedProps({id: isChecked.id}))
 
         } else {
-            dispatch(todoActions.addCheckedProps({id: idTodo}))
+            dispatch(todoActions.addCheckedProps({id: isChecked?.id}))
         }
         
     }
-
     const onUpdate = () => {
         setIsUpdate((prevState) => !prevState)
-        if(isUpdate) {
-            dispatch(todoActions.updateTodo({id: idTodo, currentState: value}))
-        } else {
-            dispatch(todoActions.updateTodo({id: idTodo, currentState: label}))
+        console.log(isUpdate, "8696678678876")
+        if (isUpdate){
+            dispatch(todoActions.changeUpdate(false))
 
+        } else {
+            dispatch(todoActions.changeUpdate(true))
         }
+
+        dispatch(todoActions.updateTodo({id: idTodo, currentState: value}))
     }
     const labelButton = isUpdate ? "Save" : "Update" 
-    const todoItemClassName = isChecked ? "completed-item" : "todo-item"
-
+    const todoItemClassName = isChecked?.isChecked ? "completed-item" : "todo-item"
+    const className = isUpdateAll ? "disabled-btn" : "edit-btn";
     return (
         <>
           <div className={todoItemClassName}>
                 <div className="info-container">
                   {
                     !isDeleted && <input 
-                                    checked={isChecked}
+                                    checked={isChecked?.isChecked}
                                     onChange={onChecked} 
                                     className="checkbox" 
                                     type="checkbox"
@@ -68,9 +70,9 @@ export function TodoItem ({label, indexProps, isDeleted = false, onDelete}: Prop
                 </div>
                 <div className="container-btn">
                     {
-                      !isDeleted && <ActionButton disabled={isChecked} label={labelButton} onClick={onUpdate} className="edit-btn"/>
+                      !isDeleted && <ActionButton disabled={isChecked?.isChecked} label={labelButton} onClick={onUpdate} className="edit-btn"/>
                     }
-                  <ActionButton disabled={isChecked} label="Delete" onClick={onDelete} className="edit-btn"/>
+                  <ActionButton disabled={isChecked?.isChecked || isUpdateAll} label="Delete" onClick={onDelete} className={className}/>
                 </div>
           </div>
         </>
@@ -82,8 +84,8 @@ function AllTodoList() {
     const {allTodo} = useAppSelector(state => state.todoReducer);
     const dispatch = useAppDispatch();
 
-    const onDelete = (index: number) => {
-        dispatch(todoActions.deleteTodo({index, isDeleted: false}))
+    const onDelete = (id: number) => {
+        dispatch(todoActions.deleteTodo({id, isDeleted: false}))
     }
 
     if(allTodo.length === 0) {
@@ -99,7 +101,7 @@ function AllTodoList() {
                       key={index}
                       indexProps={index} 
                       label={todo.value}
-                      onDelete={() => onDelete(index)} 
+                      onDelete={() => onDelete(Number(todo.id))} 
                     />
                 )
             }
